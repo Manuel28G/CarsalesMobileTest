@@ -15,10 +15,13 @@ import kotlinx.coroutines.launch
 
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class CovidInfoViewModel: ViewModel() {
-    private var mApi : CovidDataAPI = RetrofitHelper().getInstance()
-    private var mRepository:CovidData = CovidDataImpl(mApi)
+class CovidInfoViewModel @Inject constructor(
+    private var mApi : RetrofitHelper
+): ViewModel() {
+
+    private var mRepository:CovidData = CovidDataImpl(mApi.getInstance())
     private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
     private var monthNameFormat = SimpleDateFormat("MMMM")
     private var mDayConsulted: MutableLiveData<Int> = MutableLiveData()

@@ -6,17 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 
 import com.manuel28g.carsales.covidworlddata.R
+import com.manuel28g.carsales.covidworlddata.core.application.AppCovid
 import com.manuel28g.carsales.covidworlddata.databinding.FragmentErrorDataBinding
 import com.manuel28g.carsales.covidworlddata.viewmodel.CovidInfoViewModel
+import javax.inject.Inject
 
 class ErrorDataFragment: Fragment(), RetryActionButton{
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private lateinit var mBinding: FragmentErrorDataBinding
-    private lateinit var viewModel: CovidInfoViewModel
+    private val viewModel: CovidInfoViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,9 +35,12 @@ class ErrorDataFragment: Fragment(), RetryActionButton{
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.actionButton = this
 
-        viewModel = ViewModelProviders.of(requireActivity()).get(CovidInfoViewModel::class.java)
-
         return mBinding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupInjection()
     }
 
     override fun onClickButton() {
@@ -38,6 +48,9 @@ class ErrorDataFragment: Fragment(), RetryActionButton{
         Navigation.findNavController(mBinding.root).popBackStack()
     }
 
+    private fun setupInjection(){
+        (context?.applicationContext as AppCovid).getComponent().inject(this)
+    }
 
 }
 
