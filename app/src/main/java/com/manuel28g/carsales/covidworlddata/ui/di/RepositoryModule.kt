@@ -13,4 +13,13 @@ abstract class RepositoryModule {
     @Binds
     abstract fun bindRepository(covidRepository:CovidDataImpl): CovidData
 
+//    @Module
+//    companion object{
+//        @Provides
+//        @JvmStatic
+//        fun provideRestApi(): CovidDataAPI {
+//            return provideRestApi()
+//        }
+//    }
+
 }
