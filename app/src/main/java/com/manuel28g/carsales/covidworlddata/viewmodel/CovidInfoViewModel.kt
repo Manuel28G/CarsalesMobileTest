@@ -5,19 +5,16 @@ import androidx.lifecycle.*
 import com.manuel28g.carsales.covidworlddata.model.CovidInfo
 import com.manuel28g.carsales.covidworlddata.repository.CovidData
 import kotlinx.coroutines.CoroutineDispatcher
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class CovidInfoViewModel @Inject constructor(
-    private var mRepository: CovidData,
-    private val mDispatcher: CoroutineDispatcher
+    private val mDispatcher: CoroutineDispatcher,
+    private var mRepository: CovidData
 ) : ViewModel() {
 
     private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
@@ -54,7 +51,7 @@ class CovidInfoViewModel @Inject constructor(
 
     fun getActualDate() {
         mIsApiResponse.value = false
-        viewModelScope.launch(mDispatcher) {
+        viewModelScope.launch(Dispatchers.IO) {
             mRepository.getCurrentData().map {
                 mapData(it)
             }.catch {
