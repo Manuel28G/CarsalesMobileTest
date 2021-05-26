@@ -76,4 +76,8 @@ dependencies {
 
     //Gson: Library use to map data and convert to object
     implementation "com.google.code.gson:gson:2.8.6"
+
+    //Modules
+    implementation project(path: ':tradebasemodule')
+
 }

@@ -1,0 +1,6 @@
+[submodule "android.trade.basemodule"]
+	path = android.trade.basemodule
+	url = git@github.com:carsales-PRIVATE/android.trade.basemodule.git
+[submodule "CarsalesMobileTestRouter"]
+	path = CarsalesMobileTestRouter
+	url = git@github.com:Manuel28G/CarsalesMobileTestRouter.git
