@@ -51,7 +51,7 @@ class CovidInfoViewModel @Inject constructor(
 
     fun getActualDate() {
         mIsApiResponse.value = false
-        viewModelScope.launch(mDispatcher) {
+        viewModelScope.launch(Dispatchers.IO) {
             mRepository.getCurrentData().map {
                 mapData(it)
             }.catch {
@@ -108,7 +108,7 @@ class CovidInfoViewModel @Inject constructor(
 
     fun getData(body: String) {
         mIsApiResponse.value = false
-        viewModelScope.launch(mDispatcher) {
+        viewModelScope.launch(Dispatchers.IO) {
             mRepository.getData(body).map {
                 mapData(it)
             }.catch {
