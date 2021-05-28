@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 
 import com.manuel28g.carsales.covidworlddata.R
 import com.manuel28g.carsales.covidworlddata.core.application.AppCovid
+import com.manuel28g.carsales.covidworlddata.core.application.appComponent
 import com.manuel28g.carsales.covidworlddata.databinding.FragmentErrorDataBinding
 import com.manuel28g.carsales.covidworlddata.viewmodel.CovidInfoViewModel
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class ErrorDataFragment: Fragment(), RetryActionButton{
     }
 
     private fun setupInjection(){
-        (context?.applicationContext as AppCovid).getComponent().inject(this)
+        appComponent().inject(this)
     }
 }
 

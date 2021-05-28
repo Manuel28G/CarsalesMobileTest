@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.manuel28g.carsales.covidworlddata.R
 import com.manuel28g.carsales.covidworlddata.core.application.AppCovid
+import com.manuel28g.carsales.covidworlddata.core.application.appComponent
 import com.manuel28g.carsales.covidworlddata.databinding.FragmentHomeBinding
 import com.manuel28g.carsales.covidworlddata.viewmodel.CovidInfoViewModel
 import java.util.*
@@ -84,7 +85,7 @@ class HomeFragment: Fragment(), DatePickerDialog.OnDateSetListener{
     }
 
     private fun setupInjection(){
-        (context?.applicationContext as AppCovid).getComponent().inject(this)
+        appComponent().inject(this)
     }
 
 }

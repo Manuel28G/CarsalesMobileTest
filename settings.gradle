@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "CovidWorldData"
+include ':basemodule'
+project(':basemodule').projectDir = new File('android.basemodule/basemodule')

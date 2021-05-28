@@ -1,0 +1,3 @@
+[submodule "android.basemodule"]
+	path = android.basemodule
+	url = git@github.com:carsales-PRIVATE/android.basemodule.git
