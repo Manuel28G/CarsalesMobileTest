@@ -1,24 +1,22 @@
 package com.manuel28g.carsales.covidworlddata.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.*
 
-import com.manuel28g.carsales.covidworlddata.helpers.RetrofitHelper
 import com.manuel28g.carsales.covidworlddata.model.CovidInfo
 import com.manuel28g.carsales.covidworlddata.repository.CovidData
-import com.manuel28g.carsales.covidworlddata.repository.CovidDataImpl
-import com.manuel28g.carsales.covidworlddata.repository.api.CovidDataAPI
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-
 import kotlinx.coroutines.launch
-
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class CovidInfoViewModel: ViewModel() {
-    private var mApi : CovidDataAPI = RetrofitHelper().getInstance()
-    private var mRepository:CovidData = CovidDataImpl(mApi)
+class CovidInfoViewModel @Inject constructor(
+    private val mDispatcher: CoroutineDispatcher,
+    private var mRepository: CovidData
+) : ViewModel() {
+
     private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
     private var monthNameFormat = SimpleDateFormat("MMMM")
     private var mDayConsulted: MutableLiveData<Int> = MutableLiveData()
@@ -27,13 +25,12 @@ class CovidInfoViewModel: ViewModel() {
     private var mConfirmedCases: MutableLiveData<Long> = MutableLiveData()
     private var mDeathPeople: MutableLiveData<Long> = MutableLiveData()
     private var mIsApiResponse: MutableLiveData<Boolean> = MutableLiveData()
-    private var mMinDate:Long? = null
-    private var mMaxDate:Long? = null
+    private var mMinDate: Long? = null
+    private var mMaxDate: Long? = null
     private var mError = MutableLiveData<Boolean>()
 
-
-    fun getMaxDate():Long{
-        if(mMaxDate == null) {
+    fun getMaxDate(): Long {
+        if (mMaxDate == null) {
             var previousDay: Calendar = Calendar.getInstance().clone() as Calendar
             previousDay.add(Calendar.DAY_OF_MONTH, -1)
             mMaxDate = previousDay.timeInMillis
@@ -41,8 +38,8 @@ class CovidInfoViewModel: ViewModel() {
         return mMaxDate!!
     }
 
-    fun getMinDate():Long{
-        if(mMinDate == null) {
+    fun getMinDate(): Long {
+        if (mMinDate == null) {
             var minDate: Calendar = Calendar.getInstance().clone() as Calendar
             minDate.add(Calendar.DAY_OF_MONTH, -1)
             minDate.set(Calendar.MONTH, 2)
@@ -52,7 +49,7 @@ class CovidInfoViewModel: ViewModel() {
         return mMinDate!!
     }
 
-    fun getActualDate(){
+    fun getActualDate() {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
             mRepository.getCurrentData().map {
@@ -64,11 +61,11 @@ class CovidInfoViewModel: ViewModel() {
         }
     }
 
-    private fun mapData(info: CovidInfo?){
-        val date:Calendar = Calendar.getInstance().clone() as Calendar
+    private fun mapData(info: CovidInfo?) {
+        val date: Calendar = Calendar.getInstance().clone() as Calendar
         date.time = mFormatter.parse(info?.data?.date)
         viewModelScope.launch(Dispatchers.Main) {
-            mDayConsulted.value =  date.get(Calendar.DAY_OF_MONTH)
+            mDayConsulted.value = date.get(Calendar.DAY_OF_MONTH)
             mYearConsulted.value = date.get(Calendar.YEAR)
             mMonthConsulted.value = monthNameFormat.format(date.time)
             mConfirmedCases.value = info?.data?.confirmed
@@ -77,39 +74,39 @@ class CovidInfoViewModel: ViewModel() {
         }
     }
 
-    fun isApiResponse():LiveData<Boolean>{
+    fun isApiResponse(): LiveData<Boolean> {
         return mIsApiResponse
     }
 
-    fun resetError(){
+    fun resetError() {
         mError.value = false
     }
 
-    fun getDay():LiveData<Int>{
+    fun getDay(): LiveData<Int> {
         return mDayConsulted
     }
 
-    fun getMonth():LiveData<String>{
+    fun getMonth(): LiveData<String> {
         return mMonthConsulted
     }
 
-    fun getYear():LiveData<Int>{
+    fun getYear(): LiveData<Int> {
         return mYearConsulted
     }
 
-    fun getConfirmedCases():LiveData<Long>{
+    fun getConfirmedCases(): LiveData<Long> {
         return mConfirmedCases
     }
 
-    fun getTotalDeaths():LiveData<Long>{
+    fun getTotalDeaths(): LiveData<Long> {
         return mDeathPeople
     }
 
-    fun andErrorOccurs():LiveData<Boolean>{
+    fun andErrorOccurs(): LiveData<Boolean> {
         return mError
     }
 
-    fun getData(body: String){
+    fun getData(body: String) {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
             mRepository.getData(body).map {
@@ -119,5 +116,4 @@ class CovidInfoViewModel: ViewModel() {
             }.collect()
         }
     }
-
 }

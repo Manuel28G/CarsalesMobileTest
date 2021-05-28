@@ -57,15 +57,13 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    app:srcCompat="@android:drawable/radiobutton_off_background"
-                    app:tint="@color/black" />
+                    android:theme="@style/DotInfo" />
                 <TextView
                     android:id="@+id/home_tv_title_1"
                     android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:textColor="@color/black"
                     android:text="@{String.format(@string/confirmed_cases_title,viewModel.confirmedCases)}"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -80,15 +78,14 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    app:srcCompat="@android:drawable/radiobutton_off_background"
-                    app:tint="@color/black" />
+                    android:theme="@style/DotInfo"
+                    />
                 <TextView
                     android:id="@+id/home_tv_title_2"
                     android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:textColor="@color/black"
                     android:text="@{String.format(@string/death_people_title,viewModel.totalDeaths)}"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -111,11 +108,9 @@
                 android:layout_marginTop="100dp"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/white"
                 android:text="Seleccione una fecha"
-                android:textAllCaps="false"
                 android:onClick="@{()->dataPicker.show()}"
-                android:textColor="@color/black"
+                android:theme="@style/ActionButton"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
