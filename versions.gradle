@@ -4,6 +4,7 @@ ext{
     retrofit_version = "2.7.1"
     dagger_version = "2.35.1"
     mockito_version = "3.2.0"
+    multidex_version = "2.0.1"
 
     localPropertiesFile = rootProject.file("local.properties")
     localProperties = new Properties()

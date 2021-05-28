@@ -1,0 +1,3 @@
+[submodule "android.trade.basemodule"]
+	path = android.trade.basemodule
+	url = https://github.com/carsales-PRIVATE/android.trade.basemodule.git
