@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Component(
     modules = [
         PresentationModule::class,
-        RepositoryModule::class,
         CovidInfoApplicationModule::class
     ]
 )

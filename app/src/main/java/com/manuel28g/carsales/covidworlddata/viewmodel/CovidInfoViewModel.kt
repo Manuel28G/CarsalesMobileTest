@@ -2,20 +2,18 @@ package com.manuel28g.carsales.covidworlddata.viewmodel
 
 import androidx.lifecycle.*
 
-import com.manuel28g.carsales.covidworlddata.model.CovidInfo
-import com.manuel28g.carsales.covidworlddata.repository.CovidData
-import kotlinx.coroutines.CoroutineDispatcher
+import com.manuel28g.carsales.covidworlddata.core.application.getDataService
+import com.manuel28g.carsalesmobiletestdata.model.CovidInfo
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class CovidInfoViewModel @Inject constructor(
-    private val mDispatcher: CoroutineDispatcher,
-    private var mRepository: CovidData
-) : ViewModel() {
+class CovidInfoViewModel @Inject constructor() : ViewModel() {
 
     private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
     private var monthNameFormat = SimpleDateFormat("MMMM")
@@ -52,11 +50,11 @@ class CovidInfoViewModel @Inject constructor(
     fun getActualDate() {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getCurrentData().map {
+            getDataService()?.getCurrentData()?.map {
                 mapData(it)
-            }.catch {
+            }?.catch {
                 mError.postValue(true)
-            }.collect()
+            }?.collect()
 
         }
     }
@@ -109,11 +107,11 @@ class CovidInfoViewModel @Inject constructor(
     fun getData(body: String) {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getData(body).map {
+            getDataService()?.getData(body)?.map {
                 mapData(it)
-            }.catch {
+            }?.catch {
                 mError.postValue(true)
-            }.collect()
+            }?.collect()
         }
     }
 }
