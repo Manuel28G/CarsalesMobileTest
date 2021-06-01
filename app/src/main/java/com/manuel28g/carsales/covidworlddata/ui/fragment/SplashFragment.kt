@@ -24,7 +24,9 @@ class SplashFragment: Fragment() {
 
         GlobalScope.launch{
             delay(1000)
-            goToLoading()
+            MainScope().launch {
+                goToLoading()
+            }
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_splash, container, false)
         return binding.root
