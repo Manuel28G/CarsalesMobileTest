@@ -1,6 +1,4 @@
-rootProject.name = "CovidWorldData"
 include ':app'
-include ':CarsalesMobileTestData'
-include ':CarsalesMobileTestRouter'
+rootProject.name = "CovidWorldData"
 include ':basemodule'
 project(':basemodule').projectDir = new File('android.basemodule/basemodule')
