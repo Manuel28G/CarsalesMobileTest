@@ -4,6 +4,7 @@ import au.com.carsales.basemodule.dependency.component.BaseApplicationComponent
 import com.manuel28g.carsales.covidworlddata.core.common.di.ActivityScope
 import com.manuel28g.carsales.covidworlddata.ui.fragment.ErrorDataFragment
 import com.manuel28g.carsales.covidworlddata.ui.fragment.HomeFragment
+
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,7 +12,6 @@ import javax.inject.Singleton
 @Component(
     modules = [
         PresentationModule::class,
-        RepositoryModule::class,
         CovidInfoApplicationModule::class
     ]
 )
