@@ -51,7 +51,6 @@ class HomeFragment: Fragment(), DatePickerDialog.OnDateSetListener{
         mDatePickerDialog.datePicker.minDate = viewModel.getMinDate()
         mBinding.viewModel = viewModel
 
-        callData(null)
         viewModel.andErrorOccurs().observe(viewLifecycleOwner,  {
             if(it){
                 viewModel.resetError()

@@ -27,6 +27,10 @@ class CovidInfoViewModel @Inject constructor() : ViewModel() {
     private var mMaxDate: Long? = null
     private var mError = MutableLiveData<Boolean>()
 
+    init {
+        getActualDate()
+    }
+
     fun getMaxDate(): Long {
         if (mMaxDate == null) {
             var previousDay: Calendar = Calendar.getInstance().clone() as Calendar
