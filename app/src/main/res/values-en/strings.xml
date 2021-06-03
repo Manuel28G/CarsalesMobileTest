@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CovidWorldData</string>
+    <string name="confirmed_cases_title">Confirmed cases: %d</string>
+    <string name="death_people_title">Deaths: %d</string>
+    <string name="date_title_format">%d %s, %d</string>
+    <string name="retry_button">Retry</string>
+    <string name="error_title">something went wrong when try to get data</string>
+    <string name="select_date_button">Select date</string>
+
+</resources>
