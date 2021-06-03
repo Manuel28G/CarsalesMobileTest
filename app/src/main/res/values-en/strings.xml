@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">CovidWorldData</string>
-    <string name="confirmed_cases_title">Confirmed cases: %d</string>
-    <string name="death_people_title">Deaths: %d</string>
+    <string name="confirmed_cases_title">Confirmed cases: %s</string>
+    <string name="death_people_title">Deaths: %s</string>
     <string name="date_title_format">%d %s, %d</string>
     <string name="retry_button">Retry</string>
     <string name="error_title">something went wrong when try to get data</string>

@@ -8,6 +8,8 @@ import com.manuel28g.carsalesmobiletestdata.model.CovidInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -15,14 +17,15 @@ import javax.inject.Inject
 
 class CovidInfoViewModel @Inject constructor() : ViewModel() {
 
-    private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
-    private var monthNameFormat = SimpleDateFormat("MMMM")
-    private var mDayConsulted: MutableLiveData<Int> = MutableLiveData()
-    private var mMonthConsulted: MutableLiveData<String> = MutableLiveData()
-    private var mYearConsulted: MutableLiveData<Int> = MutableLiveData()
-    private var mConfirmedCases: MutableLiveData<Long> = MutableLiveData()
-    private var mDeathPeople: MutableLiveData<Long> = MutableLiveData()
-    private var mIsApiResponse: MutableLiveData<Boolean> = MutableLiveData()
+    private val mFormatter = SimpleDateFormat("yyyy-MM-dd")
+    private val monthNameFormat = SimpleDateFormat("MMMM")
+    private val numberFormat = NumberFormat.getInstance(Locale.GERMAN)
+    private val mDayConsulted: MutableLiveData<Int> = MutableLiveData()
+    private val mMonthConsulted: MutableLiveData<String> = MutableLiveData()
+    private val mYearConsulted: MutableLiveData<Int> = MutableLiveData()
+    private val mConfirmedCases: MutableLiveData<String> = MutableLiveData()
+    private val mDeathPeople: MutableLiveData<String> = MutableLiveData()
+    private val mIsApiResponse: MutableLiveData<Boolean> = MutableLiveData()
     private var mMinDate: Long? = null
     private var mMaxDate: Long? = null
     private var mError = MutableLiveData<Boolean>()
@@ -70,8 +73,8 @@ class CovidInfoViewModel @Inject constructor() : ViewModel() {
             mDayConsulted.value = date.get(Calendar.DAY_OF_MONTH)
             mYearConsulted.value = date.get(Calendar.YEAR)
             mMonthConsulted.value = monthNameFormat.format(date.time)
-            mConfirmedCases.value = info?.data?.confirmed
-            mDeathPeople.value = info?.data?.deaths
+            mConfirmedCases.value = numberFormat.format(info?.data?.confirmed)
+            mDeathPeople.value = numberFormat.format(info?.data?.deaths)
             mIsApiResponse.value = true
         }
     }
@@ -96,11 +99,11 @@ class CovidInfoViewModel @Inject constructor() : ViewModel() {
         return mYearConsulted
     }
 
-    fun getConfirmedCases(): LiveData<Long> {
+    fun getConfirmedCases(): LiveData<String > {
         return mConfirmedCases
     }
 
-    fun getTotalDeaths(): LiveData<Long> {
+    fun getTotalDeaths(): LiveData<String> {
         return mDeathPeople
     }
 
