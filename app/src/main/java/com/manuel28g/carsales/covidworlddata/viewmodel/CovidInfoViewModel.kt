@@ -3,14 +3,14 @@ package com.manuel28g.carsales.covidworlddata.viewmodel
 import androidx.lifecycle.*
 
 import com.manuel28g.carsales.covidworlddata.core.application.getDataService
+import com.manuel28g.carsales.covidworlddata.core.application.isNetworkAvailable
 import com.manuel28g.carsalesmobiletestdata.model.CovidInfo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class CovidInfoViewModel @Inject constructor() : ViewModel() {
             getDataService()?.getCurrentData()?.map {
                 mapData(it)
             }?.catch {
-                mError.postValue(true)
+                errorGettingData()
             }?.collect()
 
         }
@@ -117,8 +117,15 @@ class CovidInfoViewModel @Inject constructor() : ViewModel() {
             getDataService()?.getData(body)?.map {
                 mapData(it)
             }?.catch {
-                mError.postValue(true)
+                errorGettingData()
             }?.collect()
+        }
+    }
+
+    private fun errorGettingData(){
+        viewModelScope.launch(Dispatchers.Main) {
+            isNetworkAvailable()
+            mError.value = true
         }
     }
 }

@@ -8,5 +8,6 @@
     <string name="retry_button">Retry</string>
     <string name="error_title">something went wrong when try to get data</string>
     <string name="select_date_button">Select date</string>
+    <string name="internet_error_message">No internet connection.</string>
 
 </resources>
