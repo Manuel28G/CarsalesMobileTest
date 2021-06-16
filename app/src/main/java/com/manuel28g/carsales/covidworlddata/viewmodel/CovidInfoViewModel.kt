@@ -2,32 +2,37 @@ package com.manuel28g.carsales.covidworlddata.viewmodel
 
 import androidx.lifecycle.*
 
-import com.manuel28g.carsales.covidworlddata.model.CovidInfo
-import com.manuel28g.carsales.covidworlddata.repository.CovidData
-import kotlinx.coroutines.CoroutineDispatcher
+import com.manuel28g.carsales.covidworlddata.core.application.getDataService
+import com.manuel28g.carsales.covidworlddata.core.application.isNetworkAvailable
+import com.manuel28g.carsalesmobiletestdata.model.CovidInfo
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class CovidInfoViewModel @Inject constructor(
-    private val mDispatcher: CoroutineDispatcher,
-    private var mRepository: CovidData
-) : ViewModel() {
+class CovidInfoViewModel @Inject constructor() : ViewModel() {
 
-    private var mFormatter = SimpleDateFormat("yyyy-MM-dd")
-    private var monthNameFormat = SimpleDateFormat("MMMM")
-    private var mDayConsulted: MutableLiveData<Int> = MutableLiveData()
-    private var mMonthConsulted: MutableLiveData<String> = MutableLiveData()
-    private var mYearConsulted: MutableLiveData<Int> = MutableLiveData()
-    private var mConfirmedCases: MutableLiveData<Long> = MutableLiveData()
-    private var mDeathPeople: MutableLiveData<Long> = MutableLiveData()
-    private var mIsApiResponse: MutableLiveData<Boolean> = MutableLiveData()
+    private val mFormatter = SimpleDateFormat("yyyy-MM-dd")
+    private val monthNameFormat = SimpleDateFormat("MMMM")
+    private val numberFormat = NumberFormat.getInstance(Locale.GERMAN)
+    private val mDayConsulted: MutableLiveData<Int> = MutableLiveData()
+    private val mMonthConsulted: MutableLiveData<String> = MutableLiveData()
+    private val mYearConsulted: MutableLiveData<Int> = MutableLiveData()
+    private val mConfirmedCases: MutableLiveData<String> = MutableLiveData()
+    private val mDeathPeople: MutableLiveData<String> = MutableLiveData()
+    private val mIsApiResponse: MutableLiveData<Boolean> = MutableLiveData()
     private var mMinDate: Long? = null
     private var mMaxDate: Long? = null
     private var mError = MutableLiveData<Boolean>()
+
+    init {
+        getActualDate()
+    }
 
     fun getMaxDate(): Long {
         if (mMaxDate == null) {
@@ -52,11 +57,11 @@ class CovidInfoViewModel @Inject constructor(
     fun getActualDate() {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getCurrentData().map {
+            getDataService()?.getCurrentData()?.map {
                 mapData(it)
-            }.catch {
-                mError.postValue(true)
-            }.collect()
+            }?.catch {
+                errorGettingData()
+            }?.collect()
 
         }
     }
@@ -68,8 +73,8 @@ class CovidInfoViewModel @Inject constructor(
             mDayConsulted.value = date.get(Calendar.DAY_OF_MONTH)
             mYearConsulted.value = date.get(Calendar.YEAR)
             mMonthConsulted.value = monthNameFormat.format(date.time)
-            mConfirmedCases.value = info?.data?.confirmed
-            mDeathPeople.value = info?.data?.deaths
+            mConfirmedCases.value = numberFormat.format(info?.data?.confirmed)
+            mDeathPeople.value = numberFormat.format(info?.data?.deaths)
             mIsApiResponse.value = true
         }
     }
@@ -94,11 +99,11 @@ class CovidInfoViewModel @Inject constructor(
         return mYearConsulted
     }
 
-    fun getConfirmedCases(): LiveData<Long> {
+    fun getConfirmedCases(): LiveData<String > {
         return mConfirmedCases
     }
 
-    fun getTotalDeaths(): LiveData<Long> {
+    fun getTotalDeaths(): LiveData<String> {
         return mDeathPeople
     }
 
@@ -109,11 +114,18 @@ class CovidInfoViewModel @Inject constructor(
     fun getData(body: String) {
         mIsApiResponse.value = false
         viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getData(body).map {
+            getDataService()?.getData(body)?.map {
                 mapData(it)
-            }.catch {
-                mError.postValue(true)
-            }.collect()
+            }?.catch {
+                errorGettingData()
+            }?.collect()
+        }
+    }
+
+    private fun errorGettingData(){
+        viewModelScope.launch(Dispatchers.Main) {
+            isNetworkAvailable()
+            mError.value = true
         }
     }
 }
